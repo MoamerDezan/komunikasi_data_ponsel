@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Komunikasi Data dengan Ponsel | Informatika Kelas 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080d18;
+  --surface: #0f1829;
+  --surface2: #162035;
+  --surface3: #1c2a44;
+  --border: #1e3050;
+  --accent1: #00c8f5;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --accent4: #f59e0b;
+  --accent5: #f43f5e;
+  --text: #dce8f5;
+  --text-muted: #5d7a99;
+  --text-soft: #8fa8c4;
+  --glow1: rgba(0,200,245,0.12);
+  --glow2: rgba(124,58,237,0.12);
+  --glow3: rgba(16,185,129,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,200,245,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,245,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 200;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  transition: width 0.4s ease;
+  box-shadow: 0 0 12px var(--accent1);
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 70px 16px 50px;
+}
+
+header::before {
+  content: '';
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: min(700px, 100vw); height: 400px;
+  background: radial-gradient(ellipse, rgba(0,200,245,0.1) 0%, rgba(124,58,237,0.07) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(0,200,245,0.1), rgba(124,58,237,0.1));
+  border: 1px solid rgba(0,200,245,0.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent1);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  animation: fadeSlideDown 0.6s ease both;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+  animation: fadeSlideDown 0.6s ease 0.1s both;
+}
+
+.subtitle {
+  font-size: clamp(13px, 2vw, 15px);
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+  animation: fadeSlideDown 0.6s ease 0.2s both;
+}
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 12px;
+  position: relative; z-index: 10;
+  animation: fadeSlideDown 0.6s ease 0.3s both;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12px, 2.5vw, 14px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { border-color: var(--accent1); color: var(--accent1); transform: translateY(-2px); }
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(0,200,245,0.13), rgba(124,58,237,0.13));
+  border-color: var(--accent1); color: #fff;
+  box-shadow: 0 0 18px rgba(0,200,245,0.18);
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 0 14px;
+  position: relative; z-index: 5;
+}
+
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.5s ease; }
+
+/* ── SECTION HERO ── */
+.section-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: clamp(20px, 4vw, 38px);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-hero::after {
+  content: '';
+  position: absolute; top: -50px; right: -50px;
+  width: 250px; height: 250px; border-radius: 50%;
+  pointer-events: none;
+}
+
+.s1 .section-hero::after { background: radial-gradient(var(--glow1), transparent 70%); }
+.s2 .section-hero::after { background: radial-gradient(var(--glow2), transparent 70%); }
+.s3 .section-hero::after { background: radial-gradient(var(--glow3), transparent 70%); }
+
+.section-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.s1 .section-number { color: var(--accent1); }
+.s2 .section-number { color: #a78bfa; }
+.s3 .section-number { color: var(--accent3); }
+
+.section-hero h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  font-weight: 800; margin-bottom: 10px; line-height: 1.2;
+}
+
+.section-hero p { color: var(--text-soft); line-height: 1.75; font-size: clamp(13px, 2vw, 15px); max-width: 600px; }
+
+.section-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+
+.meta-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 100px;
+  font-size: 11px; font-weight: 700; border: 1px solid;
+}
+.chip-blue { color: var(--accent1); border-color: rgba(0,200,245,0.3); background: rgba(0,200,245,0.08); }
+.chip-purple { color: #c4b5fd; border-color: rgba(196,181,253,0.3); background: rgba(196,181,253,0.08); }
+.chip-green { color: var(--accent3); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
+.chip-amber { color: var(--accent4); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 16px; margin-bottom: 24px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: clamp(18px, 3vw, 26px);
+  transition: all 0.3s ease; cursor: default;
+  position: relative; overflow: hidden;
+}
+
+.card::before {
+  content: ''; position: absolute; inset: 0;
+  opacity: 0; transition: opacity 0.3s; border-radius: 18px;
+}
+
+.card:hover { transform: translateY(-3px); border-color: transparent; }
+.card:hover::before { opacity: 1; }
+
+.card-blue::before  { background: linear-gradient(135deg, rgba(0,200,245,0.06), transparent); box-shadow: inset 0 0 0 1px rgba(0,200,245,0.28); }
+.card-purple::before{ background: linear-gradient(135deg, rgba(124,58,237,0.08), transparent); box-shadow: inset 0 0 0 1px rgba(124,58,237,0.35); }
+.card-green::before { background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent); box-shadow: inset 0 0 0 1px rgba(16,185,129,0.28); }
+.card-amber::before { background: linear-gradient(135deg, rgba(245,158,11,0.06), transparent); box-shadow: inset 0 0 0 1px rgba(245,158,11,0.28); }
+
+.card-icon {
+  width: 48px; height: 48px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+}
+.icon-blue   { background: rgba(0,200,245,0.12); }
+.icon-purple { background: rgba(124,58,237,0.12); }
+.icon-green  { background: rgba(16,185,129,0.12); }
+.icon-amber  { background: rgba(245,158,11,0.12); }
+
+.card h3 { font-size: clamp(14px, 2vw, 16px); font-weight: 700; margin-bottom: 8px; }
+.card p  { font-size: clamp(12px, 1.8vw, 13.5px); color: var(--text-soft); line-height: 1.7; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: var(--surface2);
+  border-left: 3px solid;
+  border-radius: 0 14px 14px 0;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  font-size: clamp(13px, 2vw, 14px);
+  line-height: 1.8;
+  color: var(--text-soft);
+}
+.info-box strong { color: var(--text); }
+.info-box.blue  { border-color: var(--accent1); }
+.info-box.green { border-color: var(--accent3); }
+.info-box.amber { border-color: var(--accent4); }
+.info-box.purple{ border-color: #a78bfa; }
+.info-box.red   { border-color: var(--accent5); }
+
+.info-box .info-title {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: clamp(13px, 2vw, 14px);
+  color: var(--text); margin-bottom: 8px;
+}
+
+/* ── EXPLAINER BOX ── */
+.explainer {
+  background: linear-gradient(135deg, rgba(0,200,245,0.04), rgba(124,58,237,0.04));
+  border: 1px solid rgba(0,200,245,0.15);
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 24px);
+  margin-bottom: 20px;
+}
+.explainer-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(14px, 2.5vw, 16px);
+  font-weight: 700; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+  color: var(--accent1);
+}
+.explainer p { font-size: clamp(13px, 1.9vw, 14px); color: var(--text-soft); line-height: 1.8; margin-bottom: 10px; }
+.explainer p:last-child { margin-bottom: 0; }
+.explainer strong { color: var(--text); }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; overflow: hidden; margin-bottom: 24px;
+}
+
+.table-header {
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.table-header h3 { font-family: 'Syne', sans-serif; font-size: clamp(14px, 2.5vw, 16px); font-weight: 700; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table { width: 100%; border-collapse: collapse; min-width: 480px; }
+
+th {
+  padding: 12px 18px; text-align: left;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); background: var(--surface2);
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+
+td {
+  padding: 14px 18px; font-size: clamp(12px, 1.8vw, 13.5px);
+  border-bottom: 1px solid rgba(30,48,80,0.5);
+  transition: background 0.2s; line-height: 1.5;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(0,200,245,0.025); }
+
+.gen-badge {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 100px; font-size: 11px;
+  font-weight: 700; font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── SIGNAL DEMO ── */
+.signal-demo {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: clamp(18px, 3vw, 26px);
+  margin-bottom: 24px;
+}
+
+.demo-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(14px, 2.5vw, 16px); font-weight: 700;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+
+.signal-canvas-wrap {
+  background: rgba(0,0,0,0.35); border-radius: 12px;
+  overflow: hidden; margin-bottom: 16px;
+}
+
+canvas { width: 100% !important; display: block; height: 110px; }
+
+.signal-controls {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 14px;
+}
+
+.sig-btn {
+  padding: 9px 16px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-soft); font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12px, 2vw, 13px); font-weight: 600;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.sig-btn:hover { border-color: var(--accent1); color: var(--accent1); }
+.sig-btn.active { background: rgba(0,200,245,0.13); border-color: var(--accent1); color: var(--accent1); }
+
+.signal-explain {
+  background: var(--surface2); border-radius: 12px;
+  padding: 16px 18px; font-size: clamp(12px, 1.9vw, 13.5px);
+  color: var(--text-soft); line-height: 1.75;
+}
+.signal-explain strong { color: var(--text); }
+.signal-explain .label {
+  display: inline-block; padding: 2px 10px; border-radius: 100px;
+  font-size: 11px; font-weight: 700; margin-bottom: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── COMM TABS ── */
+.comm-tabs-outer {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: clamp(18px, 3vw, 26px); margin-bottom: 24px;
+}
+
+.comm-tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px; background: var(--surface2); border-radius: 12px;
+  padding: 5px; margin-bottom: 22px;
+}
+
+.comm-tab {
+  padding: 11px 8px; border: none; background: transparent;
+  border-radius: 9px; font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12px, 2.2vw, 14px); font-weight: 600;
+  color: var(--text-muted); cursor: pointer; transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  white-space: nowrap;
+}
+.comm-tab.active { background: var(--surface); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+
+.comm-content { display: none; }
+.comm-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* ── TRANSFER DEMO ── */
+.transfer-demo {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: clamp(18px, 3vw, 26px); margin-bottom: 24px;
+}
+
+.transfer-scene {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 24px 16px;
+  background: rgba(0,0,0,0.3); border-radius: 12px;
+  margin-bottom: 18px; min-height: 110px;
+  position: relative; overflow: hidden;
+}
+
+.device-box {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  z-index: 2; min-width: 60px;
+}
+
+.device-icon {
+  width: 58px; height: 58px; border-radius: 15px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; border: 2px solid var(--border);
+  background: var(--surface2); transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.device-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-align: center; }
+
+.transfer-line-area {
+  flex: 1; position: relative; height: 40px;
+  display: flex; align-items: center; min-width: 40px;
+}
+
+.t-line {
+  position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+  height: 2px; border-radius: 1px;
+}
+
+.t-line-label {
+  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--text-muted); white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace; font-weight: 500;
+}
+
+.t-packet {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700; opacity: 0; z-index: 3;
+}
+
+/* wifi rings */
+.wifi-rings {
+  position: absolute; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: center; gap: 4px;
+}
+.wifi-ring {
+  width: 14px; height: 7px; border-radius: 50% 50% 0 0;
+  border: 2px solid; border-bottom: none;
+  opacity: 0;
+}
+.wifi-ring:nth-child(1) { animation: wifiPulse 1.2s ease 0s infinite; }
+.wifi-ring:nth-child(2) { animation: wifiPulse 1.2s ease 0.2s infinite; width: 22px; height: 11px; }
+.wifi-ring:nth-child(3) { animation: wifiPulse 1.2s ease 0.4s infinite; width: 30px; height: 15px; }
+
+.bt-waves {
+  position: absolute; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: center;
+}
+.bt-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #3b82f6; margin: 0 4px; opacity: 0;
+}
+.bt-dot:nth-child(1) { animation: btPulse 1s ease 0s infinite; }
+.bt-dot:nth-child(2) { animation: btPulse 1s ease 0.15s infinite; }
+.bt-dot:nth-child(3) { animation: btPulse 1s ease 0.3s infinite; }
+.bt-dot:nth-child(4) { animation: btPulse 1s ease 0.45s infinite; }
+.bt-dot:nth-child(5) { animation: btPulse 1s ease 0.6s infinite; }
+
+.transfer-speed-bar {
+  margin: 0 0 14px; height: 5px; background: var(--surface2); border-radius: 100px; overflow: hidden;
+}
+.transfer-speed-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent3), var(--accent1));
+  width: 0%; transition: width 1.5s ease;
+}
+
+.transfer-info {
+  font-size: clamp(11px, 1.9vw, 13px); color: var(--text-muted); margin-bottom: 16px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.btn-primary {
+  padding: 11px 24px;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  border: none; border-radius: 11px; color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12px, 2vw, 13.5px); font-weight: 700;
+  cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 0 18px rgba(0,200,245,0.18);
+  white-space: nowrap;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,200,245,0.28); }
+
+/* ── EXPLAINER PANEL ── */
+.http-demo {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; overflow: hidden; margin-bottom: 24px;
+}
+
+.http-demo-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+}
+
+.http-tab {
+  flex: 1; padding: 14px; text-align: center;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(12px, 2vw, 14px); font-weight: 700;
+  color: var(--text-muted); transition: all 0.3s;
+  border-bottom: 2px solid transparent;
+}
+.http-tab.active-http { color: var(--accent1); border-bottom-color: var(--accent1); background: rgba(0,200,245,0.05); }
+.http-tab.active-https { color: var(--accent3); border-bottom-color: var(--accent3); background: rgba(16,185,129,0.05); }
+
+.http-demo-body { padding: clamp(18px, 3vw, 28px); }
+.http-panel { display: none; }
+.http-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+.browser-bar {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; font-size: 13px; font-family: 'JetBrains Mono', monospace;
+}
+.url-lock { font-size: 16px; }
+.url-text { color: var(--text-soft); }
+.url-http  .url-text span { color: #ef4444; }
+.url-https .url-text span { color: var(--accent3); }
+
+.data-flow {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;
+}
+
+.flow-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 11px;
+  font-size: clamp(12px, 1.9vw, 13px); line-height: 1.5;
+}
+
+.flow-step .step-icon { font-size: 20px; flex-shrink: 0; }
+.flow-step-label { font-weight: 700; display: block; margin-bottom: 2px; }
+
+/* ── VPN EXPLAINER ── */
+.vpn-visual {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(8px, 2vw, 16px); padding: 20px;
+  background: rgba(0,0,0,0.25); border-radius: 12px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+
+.vpn-node {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  min-width: 60px;
+}
+
+.vpn-icon-box {
+  width: 52px; height: 52px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; border: 2px solid var(--border);
+  background: var(--surface2); position: relative;
+}
+
+.vpn-label { font-size: 10px; color: var(--text-muted); font-weight: 600; text-align: center; }
+
+.vpn-arrow {
+  font-size: 20px; color: var(--text-muted); flex-shrink: 0;
+}
+
+.vpn-tunnel {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.tunnel-segment {
+  width: clamp(20px, 4vw, 32px); height: 32px;
+  border-top: 2px solid; border-bottom: 2px solid;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--text-muted); font-weight: 700;
+}
+
+/* ── THREATS ── */
+.threat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: 14px; margin-bottom: 24px;
+}
+
+.threat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; transition: all 0.3s;
+  cursor: pointer;
+}
+
+.threat-card:hover { transform: translateY(-3px); border-color: rgba(245,158,11,0.3); }
+.threat-card.expanded { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.025); }
+
+.threat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+.threat-icon {
+  width: 42px; height: 42px; border-radius: 11px;
+  background: rgba(245,158,11,0.1); display: flex; align-items: center;
+  justify-content: center; font-size: 19px; flex-shrink: 0;
+}
+
+.threat-name { font-size: clamp(13px, 2vw, 15px); font-weight: 700; }
+.threat-level {
+  padding: 3px 9px; border-radius: 100px;
+  font-size: 10px; font-weight: 700; margin-left: auto;
+  white-space: nowrap;
+}
+.level-high { background: rgba(244,63,94,0.14); color: #f43f5e; }
+.level-med  { background: rgba(245,158,11,0.14); color: var(--accent4); }
+
+.threat-desc { font-size: clamp(12px, 1.8vw, 13px); color: var(--text-soft); line-height: 1.65; }
+
+.threat-detail {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: clamp(12px, 1.8vw, 13px); color: var(--text-soft); line-height: 1.75;
+  display: none;
+}
+.threat-card.expanded .threat-detail { display: block; }
+.threat-detail strong { color: var(--text); }
+
+/* ── TIPS ── */
+.tips-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; overflow: hidden; margin-bottom: 24px;
+}
+
+.tips-header {
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.tips-header h3 { font-family: 'Syne', sans-serif; font-size: clamp(14px, 2.5vw, 16px); font-weight: 700; }
+
+.tip-item {
+  padding: 16px 24px; border-bottom: 1px solid rgba(30,48,80,0.4);
+  display: flex; align-items: flex-start; gap: 14px;
+  transition: background 0.2s;
+}
+.tip-item:last-child { border-bottom: none; }
+.tip-item:hover { background: var(--surface2); }
+
+.tip-num {
+  width: 26px; height: 26px; min-width: 26px; border-radius: 8px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(0,200,245,0.1));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+  color: var(--accent3); margin-top: 2px;
+}
+
+.tip-text strong { display: block; font-size: clamp(13px, 2vw, 14px); font-weight: 700; margin-bottom: 4px; }
+.tip-text span { font-size: clamp(12px, 1.8vw, 13px); color: var(--text-soft); line-height: 1.7; }
+
+/* ── CHECKLIST ── */
+.checklist {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: clamp(18px, 3vw, 26px); margin-bottom: 24px;
+}
+
+.check-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid rgba(30,48,80,0.35);
+  cursor: pointer; transition: all 0.2s; user-select: none;
+}
+.check-item:last-of-type { border-bottom: none; }
+
+.checkbox {
+  width: 22px; height: 22px; min-width: 22px; border-radius: 6px;
+  border: 2px solid var(--border); display: flex; align-items: center;
+  justify-content: center; transition: all 0.2s; font-size: 11px; color: transparent;
+}
+.check-item.checked .checkbox { background: var(--accent3); border-color: var(--accent3); color: #fff; }
+.check-item.checked .check-label { text-decoration: line-through; color: var(--text-muted); }
+.check-label { font-size: clamp(12px, 1.9vw, 14px); line-height: 1.4; }
+
+.checklist-score {
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.score-bar { height: 7px; border-radius: 100px; background: var(--border); flex: 1; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent3), var(--accent1)); transition: width 0.4s ease; width: 0%; }
+
+/* ── QUIZ ── */
+.quiz-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: clamp(18px, 3vw, 28px); margin-bottom: 24px;
+}
+
+.quiz-q-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.quiz-question { font-size: clamp(15px, 2.5vw, 18px); font-weight: 700; line-height: 1.5; margin-bottom: 22px; }
+.quiz-options { display: grid; gap: 9px; margin-bottom: 18px; }
+.quiz-progress-text { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+
+.quiz-option {
+  padding: 13px 18px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 11px;
+  cursor: pointer; font-size: clamp(13px, 2vw, 14px); font-weight: 500;
+  transition: all 0.2s; text-align: left; color: var(--text);
+  display: flex; align-items: center; gap: 11px; line-height: 1.4;
+}
+
+.quiz-option::before {
+  content: attr(data-letter);
+  width: 27px; height: 27px; min-width: 27px; border-radius: 7px;
+  background: var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s;
+}
+
+.quiz-option:hover { border-color: var(--accent1); color: var(--accent1); }
+.quiz-option:hover::before { background: rgba(0,200,245,0.18); color: var(--accent1); }
+.quiz-option.correct { border-color: var(--accent3); background: rgba(16,185,129,0.08); color: var(--accent3); }
+.quiz-option.correct::before { background: rgba(16,185,129,0.25); color: var(--accent3); }
+.quiz-option.wrong { border-color: #f43f5e; background: rgba(244,63,94,0.08); color: #f43f5e; }
+.quiz-option.wrong::before { background: rgba(244,63,94,0.25); color: #f43f5e; }
+
+.quiz-feedback {
+  padding: 13px 16px; border-radius: 11px;
+  font-size: clamp(12px, 1.9vw, 13.5px); font-weight: 500;
+  margin-bottom: 16px; display: none; line-height: 1.65;
+}
+.feedback-correct { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+.feedback-wrong   { background: rgba(244,63,94,0.08);  border: 1px solid rgba(244,63,94,0.25);  color: #fb7185; }
+
+.quiz-score-board { display: none; text-align: center; padding: 30px 16px; }
+.score-circle {
+  width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 3px solid;
+}
+.score-num { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; }
+.score-sub { font-size: 10px; color: var(--text-muted); }
+.score-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.score-msg { color: var(--text-soft); font-size: 14px; margin-bottom: 20px; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 0 0; border-top: 1px solid var(--border); margin-top: 8px;
+}
+
+.nav-arrow {
+  display: flex; align-items: center; gap: 7px;
+  padding: 10px 18px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 11px;
+  color: var(--text-muted); font-size: clamp(12px, 2vw, 14px); font-weight: 600;
+  cursor: pointer; transition: all 0.3s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.nav-arrow:hover { border-color: var(--accent1); color: var(--accent1); }
+.nav-arrow:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+
+.section-dots { display: flex; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.3s; }
+.dot.active { background: var(--accent1); box-shadow: 0 0 8px var(--accent1); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes wifiPulse { 0%,100%{ opacity: 0.15; } 50%{ opacity: 0.9; } }
+@keyframes btPulse { 0%,100%{ opacity: 0.1; transform: scale(0.8); } 50%{ opacity: 1; transform: scale(1.2); } }
+@keyframes packetMove { 0%{ left: -5%; opacity: 0; } 5%{ opacity: 1; } 95%{ opacity: 1; } 100%{ left: 108%; opacity: 0; } }
+@keyframes signalSend { 0%{ box-shadow: 0 0 0 0 rgba(0,200,245,0.5); } 100%{ box-shadow: 0 0 0 16px rgba(0,200,245,0); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .nav-tabs { gap: 6px; }
+  .tab-btn { padding: 9px 13px; font-size: 11px; }
+  .tab-btn .icon-text { display: none; }
+  .comm-tab .tab-text { display: none; }
+  .vpn-visual { gap: 6px; }
+  .vpn-tunnel { display: none; }
+  .vpn-arrow { font-size: 14px; }
+  .device-icon { width: 48px; height: 48px; font-size: 22px; }
+  .transfer-scene { padding: 14px 10px; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:33%"></div>
+
+<header>
+  <div class="badge">📱 Informatika · Kelas 10 · Semester 2</div>
+  <h1>Komunikasi Data<br>dengan Ponsel</h1>
+  <p class="subtitle">Jelajahi cara ponsel berkomunikasi — dari sinyal jaringan, cara kirim data, hingga keamanan saat berinternet.</p>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchSection(0)" id="tab0">
+      <span>📡</span><span class="icon-text">Jaringan Ponsel</span>
+    </button>
+    <button class="tab-btn" onclick="switchSection(1)" id="tab1">
+      <span>🔗</span><span class="icon-text">Komunikasi Data</span>
+    </button>
+    <button class="tab-btn" onclick="switchSection(2)" id="tab2">
+      <span>🔒</span><span class="icon-text">Proteksi Data</span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════════════ SECTION 1 ═══════════════════ -->
+<div class="section s1 active" id="section0">
+
+  <div class="section-hero">
+    <div class="section-number">// Topik 01</div>
+    <h2>🗼 Jaringan Komunikasi pada Ponsel</h2>
+    <p>Ponsel tidak bekerja sendiri — ia bergantung pada infrastruktur besar yang tersebar di seluruh kota dan negara. Mari kita pahami cara kerja jaringan yang menghubungkan miliaran orang ini.</p>
+    <div class="section-meta">
+      <span class="meta-chip chip-blue">📶 Generasi 1G–5G</span>
+      <span class="meta-chip chip-purple">🗼 BTS & Tower</span>
+      <span class="meta-chip chip-green">📻 Gelombang Radio</span>
+    </div>
+  </div>
+
+  <!-- Concept Cards -->
+  <div class="cards-grid">
+    <div class="card card-blue">
+      <div class="card-icon icon-blue">🗼</div>
+      <h3>Base Transceiver Station (BTS)</h3>
+      <p>Menara BTS adalah "penghubung" antara ponselmu dan jaringan. Setiap BTS menjangkau area tertentu (disebut <strong>sel</strong> atau <em>cell</em>). Itulah kenapa jaringan ponsel disebut jaringan <em>seluler</em> — karena terdiri dari banyak sel yang saling bersambung.</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon icon-purple">📻</div>
+      <h3>Gelombang Elektromagnetik</h3>
+      <p>Ponsel berkomunikasi menggunakan <strong>gelombang radio</strong> yang tidak kasat mata. Gelombang ini merambat di udara dengan kecepatan cahaya (~300.000 km/detik). Semakin tinggi frekuensinya, semakin banyak data yang bisa dibawa — tapi jangkauannya lebih pendek.</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon icon-green">🔄</div>
+      <h3>Handover / Handoff</h3>
+      <p>Saat kamu berjalan atau berkendara sambil menelepon, ponselmu otomatis berpindah dari satu BTS ke BTS berikutnya tanpa memutus sambungan. Proses perpindahan mulus ini disebut <strong>handover</strong>. Terjadi secepat kilat — kamu bahkan tidak sadar!</p>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon icon-amber">🌍</div>
+      <h3>Roaming</h3>
+      <p>Ketika pergi ke kota/negara lain dan di luar jangkauan operatormu, ponsel bisa "nebeng" ke jaringan operator lain. Ini disebut <strong>roaming</strong>. Biasanya dikenakan biaya ekstra. Ponselmu menampilkan nama operator asing di status bar.</p>
+    </div>
+  </div>
+
+  <!-- Signal Demo with Explanation -->
+  <div class="signal-demo">
+    <div class="demo-title">📊 Visualisasi & Penjelasan Jenis Sinyal</div>
+    <div class="signal-canvas-wrap">
+      <canvas id="signalCanvas" height="110"></canvas>
+    </div>
+    <div class="signal-controls">
+      <button class="sig-btn active" onclick="setSignal('analog', this)">📡 Sinyal Analog</button>
+      <button class="sig-btn" onclick="setSignal('digital', this)">⬛ Sinyal Digital</button>
+      <button class="sig-btn" onclick="setSignal('modulated', this)">🌊 Termodulasi</button>
+    </div>
+    <div class="signal-explain" id="signalExplain">
+      <span class="label" style="background:rgba(0,200,245,0.15);color:var(--accent1)">ANALOG</span><br>
+      <strong>Kenapa bentuknya seperti gelombang laut?</strong><br>
+      Sinyal analog bergerak secara <strong>kontinu</strong> — nilai sinyalnya bisa berubah secara mulus dari tinggi ke rendah, seperti ombak laut. Suara manusia sebenarnya adalah sinyal analog — getaran udara yang mengubah tekanan secara halus dan terus-menerus. Sinyal 1G menggunakan analog. Kelemahannya: mudah terganggu oleh "noise" (gangguan), sehingga bisa terdengar suara statis saat sinyal lemah.
+    </div>
+  </div>
+
+  <!-- Generation Table -->
+  <div class="table-wrap">
+    <div class="table-header"><span>📋</span><h3>Evolusi Jaringan Seluler — dari 1G ke 5G</h3></div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Gen</th><th>Tahun</th><th>Kecepatan</th><th>Teknologi</th><th>Yang Baru</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="gen-badge" style="background:rgba(100,116,139,0.2);color:#94a3b8">1G</span></td>
+          <td>1980-an</td><td>2.4 kbps</td><td>AMPS</td>
+          <td>Pertama kali ada telepon seluler, masih analog</td>
+        </tr>
+        <tr>
+          <td><span class="gen-badge" style="background:rgba(59,130,246,0.15);color:#60a5fa">2G</span></td>
+          <td>1990-an</td><td>64 kbps</td><td>GSM</td>
+          <td>Digital, SMS pertama kali muncul, lebih hemat baterai</td>
+        </tr>
+        <tr>
+          <td><span class="gen-badge" style="background:rgba(139,92,246,0.15);color:#a78bfa">3G</span></td>
+          <td>2000-an</td><td>2 Mbps</td><td>WCDMA</td>
+          <td>Internet di ponsel, video call mulai bisa</td>
+        </tr>
+        <tr>
+          <td><span class="gen-badge" style="background:rgba(16,185,129,0.15);color:#34d399">4G</span></td>
+          <td>2010-an</td><td>100 Mbps</td><td>LTE</td>
+          <td>Streaming YouTube/Netflix lancar, sosmed kencang</td>
+        </tr>
+        <tr>
+          <td><span class="gen-badge" style="background:rgba(0,200,245,0.15);color:#00c8f5">5G</span></td>
+          <td>2020-an</td><td>10+ Gbps</td><td>NR</td>
+          <td>Latency sangat rendah, cocok untuk IoT dan AR/VR</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="info-box blue">
+    <div class="info-title">💡 Analogi Mudah: Jaringan Seluler = Sistem Pos</div>
+    Bayangkan kamu mengirim surat. Ponselmu = penulis surat. BTS = kantor pos terdekat. Jaringan operator = jalur distribusi antar kantor pos. Ponsel tujuan = penerima surat. Hanya saja, "surat" digital ini dikirim dalam sepersekian detik menggunakan gelombang radio!
+  </div>
+
+  <!-- Quiz 1 -->
+  <div class="quiz-box" id="quiz0">
+    <div class="demo-title">🧠 Uji Pemahamanmu</div>
+    <div class="quiz-progress-text" id="qprog0">Pertanyaan 1 dari 3</div>
+    <div id="quizContent0"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-arrow" disabled>← Sebelumnya</button>
+    <div class="section-dots">
+      <div class="dot active" onclick="switchSection(0)"></div>
+      <div class="dot" onclick="switchSection(1)"></div>
+      <div class="dot" onclick="switchSection(2)"></div>
+    </div>
+    <button class="nav-arrow" onclick="switchSection(1)">Selanjutnya →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 2 ═══════════════════ -->
+<div class="section s2" id="section1">
+
+  <div class="section-hero">
+    <div class="section-number">// Topik 02</div>
+    <h2>🔗 Komunikasi Data dengan Ponsel</h2>
+    <p>Ada tiga cara utama mengirim data dari ponsel: lewat kabel fisik, Bluetooth, atau Wi-Fi. Masing-masing punya keunggulan dan kelemahan tersendiri. Kita pelajari satu per satu!</p>
+    <div class="section-meta">
+      <span class="meta-chip chip-green">🔌 USB / Kabel</span>
+      <span class="meta-chip chip-blue">📘 Bluetooth</span>
+      <span class="meta-chip chip-purple">📶 Wi-Fi</span>
+    </div>
+  </div>
+
+  <!-- Comm Tabs -->
+  <div class="comm-tabs-outer">
+    <div class="comm-tabs">
+      <button class="comm-tab active" onclick="switchComm(0, this)"><span>🔌</span><span class="tab-text"> Kabel</span></button>
+      <button class="comm-tab" onclick="switchComm(1, this)"><span>📘</span><span class="tab-text"> Bluetooth</span></button>
+      <button class="comm-tab" onclick="switchComm(2, this)"><span>📶</span><span class="tab-text"> Wi-Fi</span></button>
+    </div>
+
+    <!-- KABEL -->
+    <div class="comm-content active" id="comm0">
+      <div class="explainer">
+        <div class="explainer-title">🔌 Bagaimana Transfer Data via Kabel Bekerja?</div>
+        <p>Saat menghubungkan ponsel ke laptop dengan kabel USB, data bergerak melalui <strong>kawat tembaga</strong> di dalam kabel sebagai sinyal listrik. Ini seperti air mengalir di pipa — langsung, cepat, dan tidak bisa "bocor" ke luar pipa.</p>
+        <p>Konektor <strong>USB-C</strong> (yang banyak dipakai ponsel modern) bisa transfer data hingga <strong>40 Gbps</strong> (Thunderbolt 4). Itu setara memindahkan film 4K sebesar 50 GB hanya dalam ~10 detik!</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card card-green">
+          <div class="card-icon icon-green">⚡</div>
+          <h3>Kecepatan Tinggi & Stabil</h3>
+          <p>Koneksi fisik tidak terpengaruh gangguan sinyal. USB 3.0 mencapai 5 Gbps, USB 3.2 hingga 20 Gbps. Ideal untuk backup foto/video atau instal aplikasi besar.</p>
+        </div>
+        <div class="card card-green">
+          <div class="card-icon icon-green">🔋</div>
+          <h3>Charge Sambil Transfer</h3>
+          <p>Selain data, kabel USB juga bisa mengalirkan listrik untuk mengisi daya. Satu kabel, dua fungsi sekaligus — itulah keunggulan kabel dibanding metode wireless.</p>
+        </div>
+        <div class="card card-green">
+          <div class="card-icon icon-green">🔒</div>
+          <h3>Paling Aman dari Sadapan</h3>
+          <p>Data hanya bisa mengalir di dalam kabel — tidak ada sinyal yang bisa "ditangkap" oleh orang di sekitarmu. Paling aman untuk transfer data sensitif.</p>
+        </div>
+      </div>
+      <div class="info-box green">
+        <div class="info-title">📌 Jenis Konektor Kabel Ponsel</div>
+        <strong>USB-C</strong> — Standar modern (Android & iPhone 15+). Bisa dicolok dari dua sisi (reversible). Mendukung USB 3.x, Thunderbolt, dan pengisian cepat.<br>
+        <strong>Micro-USB</strong> — Dipakai ponsel Android lama (~2010–2018). Lebih lambat, hanya USB 2.0.<br>
+        <strong>Lightning</strong> — Konektor Apple untuk iPhone hingga iPhone 14. Diganti USB-C di iPhone 15 karena regulasi EU.<br>
+        <strong>USB-A</strong> — Konektor kotak besar di laptop/komputer. Biasanya satu ujung kabel ke ponsel (USB-C/Micro), ujung lain USB-A ke laptop.
+      </div>
+    </div>
+
+    <!-- BLUETOOTH -->
+    <div class="comm-content" id="comm1">
+      <div class="explainer">
+        <div class="explainer-title">📘 Bagaimana Bluetooth Bekerja?</div>
+        <p>Bluetooth menggunakan <strong>gelombang radio frekuensi 2.4 GHz</strong>. Bayangkan dua ponsel "berbicara" satu sama lain menggunakan radio kecil yang terintegrasi di dalamnya — tanpa perlu kabel atau router.</p>
+        <p>Uniknya, Bluetooth menggunakan teknik <strong>frequency hopping</strong>: sinyal berpindah-pindah frekuensi <strong>1.600 kali per detik</strong>! Ini dilakukan agar tidak bertabrakan dengan sinyal Wi-Fi yang juga menggunakan 2.4 GHz, dan agar lebih tahan gangguan.</p>
+        <p>Sebelum bisa transfer data, dua perangkat harus <strong>"berpasangan" (pairing)</strong> terlebih dahulu — ini mekanisme keamanan agar tidak sembarang orang bisa kirim file ke ponselmu.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card card-blue">
+          <div class="card-icon icon-blue">📏</div>
+          <h3>Jangkauan 10–240 meter</h3>
+          <p>Bluetooth 5.0 bisa menjangkau hingga 240 meter di ruang terbuka. Dalam ruangan biasanya 10–30 meter karena terhalang tembok. Cocok untuk earphone, speaker, jam tangan pintar.</p>
+        </div>
+        <div class="card card-blue">
+          <div class="card-icon icon-blue">🔋</div>
+          <h3>BLE: Sangat Hemat Daya</h3>
+          <p><strong>Bluetooth Low Energy (BLE)</strong> didesain untuk perangkat kecil seperti sensor kesehatan dan IoT. Sebuah jam tangan pintar bisa bertahan berbulan-bulan dengan baterai kecil berkat BLE.</p>
+        </div>
+        <div class="card card-blue">
+          <div class="card-icon icon-blue">🔗</div>
+          <h3>Tanpa Internet</h3>
+          <p>Bluetooth bekerja langsung antar perangkat — tidak butuh internet atau router. Bisa kirim file meski tidak ada sinyal seluler sama sekali.</p>
+        </div>
+      </div>
+      <div class="info-box blue">
+        <div class="info-title">📌 Versi Bluetooth & Kemampuannya</div>
+        <strong>BT 2.0 (EDR)</strong> — 3 Mbps, banyak dipakai untuk headset lama.<br>
+        <strong>BT 4.0</strong> — Perkenalkan BLE, hemat daya drastis. Mulai dipakai wearable.<br>
+        <strong>BT 5.0</strong> — Kecepatan 2 Mbps, jangkauan 4× lebih jauh dari BT 4.0, kapasitas 8× lebih besar. Standar ponsel modern sekarang.<br>
+        <strong>BT 5.4</strong> — Terbaru (2023), makin efisien dan stabil untuk banyak perangkat sekaligus.
+      </div>
+    </div>
+
+    <!-- WIFI -->
+    <div class="comm-content" id="comm2">
+      <div class="explainer">
+        <div class="explainer-title">📶 Bagaimana Wi-Fi Bekerja?</div>
+        <p>Wi-Fi juga menggunakan <strong>gelombang radio</strong>, tapi dengan daya yang lebih besar dari Bluetooth — makanya jangkauannya lebih jauh dan kecepatannya jauh lebih tinggi. Ponselmu "berkomunikasi" dengan router (kotak hitam/putih di rumah) yang terhubung ke internet via kabel dari ISP (provider internet).</p>
+        <p>Ada dua "jalur" (band) Wi-Fi: <strong>2.4 GHz</strong> (jangkauan lebih jauh, menembus tembok lebih baik, tapi lebih lambat) dan <strong>5 GHz</strong> (lebih cepat tapi jangkauan lebih pendek). Ponsel modern bisa memilih otomatis mana yang lebih baik.</p>
+        <p><strong>Wi-Fi Direct</strong> memungkinkan dua ponsel terhubung langsung tanpa router — mirip Bluetooth tapi jauh lebih cepat (ratusan Mbps)!</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card card-purple">
+          <div class="card-icon icon-purple">🌐</div>
+          <h3>Akses Internet Cepat</h3>
+          <p>Wi-Fi 6 (802.11ax) mencapai 9.6 Gbps secara teoritis. Di rumah biasanya 50–500 Mbps tergantung paket internet. Jauh lebih kencang dari data seluler untuk aktivitas berat.</p>
+        </div>
+        <div class="card card-purple">
+          <div class="card-icon icon-purple">📡</div>
+          <h3>Hotspot / Tethering</h3>
+          <p>Ponselmu bisa jadi "router mini" yang membagikan data seluler ke laptop atau ponsel lain. Fitur ini disebut <strong>mobile hotspot</strong> atau tethering. Berguna saat di luar rumah tanpa Wi-Fi.</p>
+        </div>
+        <div class="card card-purple">
+          <div class="card-icon icon-purple">⚠️</div>
+          <h3>Hati-hati Wi-Fi Publik!</h3>
+          <p>Wi-Fi gratis di kafe, mall, atau hotel bisa berbahaya. Data yang kamu kirim bisa disadap jika koneksi tidak terenkripsi. Kita akan bahas ini lebih detail di Topik 3.</p>
+        </div>
+      </div>
+      <div class="info-box purple">
+        <div class="info-title">📌 Evolusi Standar Wi-Fi</div>
+        <strong>Wi-Fi 4 (802.11n)</strong> — 600 Mbps, 2.4/5 GHz, masih banyak di router lama.<br>
+        <strong>Wi-Fi 5 (802.11ac)</strong> — 3.5 Gbps, hanya 5 GHz, lebih kencang.<br>
+        <strong>Wi-Fi 6 (802.11ax)</strong> — 9.6 Gbps, 2.4/5 GHz, lebih efisien untuk banyak perangkat sekaligus.<br>
+        <strong>Wi-Fi 6E</strong> — Tambahan pita 6 GHz, lebih sedikit gangguan, cocok untuk apartemen padat.<br>
+        <strong>Wi-Fi 7 (802.11be)</strong> — 46 Gbps (2024), generasi terbaru.
+      </div>
+    </div>
+  </div>
+
+  <!-- Transfer Demo -->
+  <div class="transfer-demo">
+    <div class="demo-title">⚡ Simulasi Animasi Transfer Data Antar Ponsel</div>
+    <div id="transferScene" class="transfer-scene">
+      <div class="device-box">
+        <div class="device-icon" id="deviceA">📱</div>
+        <div class="device-label">Ponsel A</div>
+      </div>
+      <div class="transfer-line-area" id="transferLineArea">
+        <div class="t-line" id="tLine" style="background:linear-gradient(90deg,#1e3050,#10b981,#1e3050)"></div>
+        <div class="t-packet" id="p1"></div>
+        <div class="t-packet" id="p2"></div>
+        <div class="t-packet" id="p3"></div>
+        <span class="t-line-label" id="lineLabel">USB Cable — Hingga 5 Gbps</span>
+      </div>
+      <div class="device-box">
+        <div class="device-icon" id="deviceB">📱</div>
+        <div class="device-label">Ponsel B</div>
+      </div>
+    </div>
+    <div class="transfer-info" id="transferInfo">📂 Kirim 100 MB file · Metode: Kabel · Estimasi: ~0.16 detik</div>
+    <div class="transfer-speed-bar"><div class="transfer-speed-fill" id="speedFill"></div></div>
+    <div class="btn-row">
+      <button class="sig-btn active" onclick="setTransfer('cable', this)">🔌 Kabel</button>
+      <button class="sig-btn" onclick="setTransfer('bluetooth', this)">📘 Bluetooth</button>
+      <button class="sig-btn" onclick="setTransfer('wifi', this)">📶 Wi-Fi</button>
+      <button class="btn-primary" onclick="startTransfer()" id="sendBtn">▶ Kirim Data</button>
+    </div>
+  </div>
+
+  <!-- HTTP vs HTTPS explainer -->
+  <div class="http-demo">
+    <div class="http-demo-tabs">
+      <button class="http-tab active-http" onclick="switchHttp(0, this)" id="httpTab0">🔓 HTTP — Tidak Aman</button>
+      <button class="http-tab" onclick="switchHttp(1, this)" id="httpTab1">🔒 HTTPS — Aman</button>
+    </div>
+    <div class="http-demo-body">
+      <div class="http-panel active" id="httpPanel0">
+        <div class="explainer">
+          <div class="explainer-title" style="color:#f43f5e">🔓 HTTP: Apa Artinya Tidak Aman?</div>
+          <p><strong>HTTP</strong> (HyperText Transfer Protocol) adalah "bahasa" yang dipakai browser dan server untuk bertukar data. Masalahnya, HTTP mengirim data dalam bentuk <strong>teks biasa</strong> — siapapun yang "mendengarkan" jaringan bisa membaca isinya!</p>
+          <p>Bayangkan kamu mengirim surat tanpa amplop — semua orang yang menyentuh surat itu bisa membacanya. Itulah HTTP.</p>
+        </div>
+        <div class="browser-bar url-http">
+          <span class="url-lock">⚠️</span>
+          <span class="url-text"><span>http://</span>bank-palsu.com/login</span>
+        </div>
+        <div class="data-flow">
+          <div class="flow-step" style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2)">
+            <span class="step-icon">📱</span>
+            <div><span class="flow-step-label">Kamu kirim:</span> username=budi&password=rahasia123</div>
+          </div>
+          <div class="flow-step" style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2)">
+            <span class="step-icon">👁️</span>
+            <div><span class="flow-step-label">Di tengah jalan, hacker bisa melihat:</span> <span style="color:#f43f5e;font-family:monospace;font-size:12px">username=budi&password=rahasia123</span> ← terbaca jelas!</div>
+          </div>
+          <div class="flow-step" style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2)">
+            <span class="step-icon">😱</span>
+            <div><span class="flow-step-label">Akibatnya:</span> Akun bankmu bisa dibobol karena passwordmu terbaca tanpa enkripsi</div>
+          </div>
+        </div>
+        <div class="info-box red">
+          <div class="info-title">🚨 Ciri Website HTTP yang Berbahaya</div>
+          URL dimulai dengan <strong>http://</strong> (tanpa S) · Browser menampilkan peringatan "Tidak Aman" atau ikon ⚠️ · Tidak ada ikon kunci 🔒 di address bar · Jangan pernah memasukkan password atau data kartu kredit di situs HTTP!
+        </div>
+      </div>
+      <div class="http-panel" id="httpPanel1">
+        <div class="explainer">
+          <div class="explainer-title" style="color:var(--accent3)">🔒 HTTPS: Kenapa Aman?</div>
+          <p><strong>HTTPS</strong> (HTTP <em>Secure</em>) menggunakan lapisan enkripsi bernama <strong>TLS</strong> (Transport Layer Security). Data yang kamu kirim "dikunci" dengan kode matematika yang sangat kompleks sebelum dikirim — hanya penerima yang punya "kunci" yang bisa membukanya.</p>
+          <p>Bayangkan kamu menaruh surat dalam brankas yang terkunci. Meski seseorang mencuri brankasnya, mereka tidak bisa membukanya tanpa kunci yang benar. Itulah HTTPS!</p>
+        </div>
+        <div class="browser-bar url-https">
+          <span class="url-lock">🔒</span>
+          <span class="url-text"><span>https://</span>bri.co.id/login</span>
+        </div>
+        <div class="data-flow">
+          <div class="flow-step" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2)">
+            <span class="step-icon">📱</span>
+            <div><span class="flow-step-label">Kamu kirim (setelah dienkripsi):</span> <span style="color:var(--accent3);font-family:monospace;font-size:11px">a3Xk#9mNp...QR7!zW</span></div>
+          </div>
+          <div class="flow-step" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2)">
+            <span class="step-icon">👁️</span>
+            <div><span class="flow-step-label">Hacker menyadap tapi hanya melihat:</span> <span style="color:var(--text-muted);font-family:monospace;font-size:11px">??#@&%*!encrypted...??</span> ← tidak bisa dibaca!</div>
+          </div>
+          <div class="flow-step" style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2)">
+            <span class="step-icon">✅</span>
+            <div><span class="flow-step-label">Server bank menerima & mendekripsi:</span> Data asli terbaca hanya oleh server yang sah</div>
+          </div>
+        </div>
+        <div class="info-box green">
+          <div class="info-title">✅ Cara Mengecek HTTPS</div>
+          Lihat di address bar browser: URL harus dimulai <strong>https://</strong> · Ada ikon 🔒 di sebelah kiri URL · Klik ikon 🔒 untuk melihat sertifikat keamanan · Semua website perbankan, belanja online, dan media sosial harus menggunakan HTTPS. Jika tidak ada, jangan masukkan data apapun!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="table-wrap">
+    <div class="table-header"><span>⚖️</span><h3>Perbandingan Kabel vs Bluetooth vs Wi-Fi</h3></div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Metode</th><th>Kecepatan</th><th>Jangkauan</th><th>Hemat Baterai</th><th>Keamanan</th><th>Butuh Kabel?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>🔌 Kabel USB</strong></td>
+          <td><span style="color:var(--accent3)">⚡ Sangat Cepat</span><br><small style="color:var(--text-muted)">hingga 40 Gbps</small></td>
+          <td>~2 meter</td>
+          <td>✅ Paling hemat</td>
+          <td><span style="color:var(--accent3)">🔒 Paling Tinggi</span></td>
+          <td>✅ Ya</td>
+        </tr>
+        <tr>
+          <td><strong>📘 Bluetooth</strong></td>
+          <td><span style="color:var(--accent4)">🔵 Sedang</span><br><small style="color:var(--text-muted)">1–3 Mbps</small></td>
+          <td>10–240 m</td>
+          <td>✅ Sangat hemat (BLE)</td>
+          <td>🔐 Cukup (perlu pairing)</td>
+          <td>❌ Tidak</td>
+        </tr>
+        <tr>
+          <td><strong>📶 Wi-Fi</strong></td>
+          <td><span style="color:var(--accent1)">🚀 Cepat</span><br><small style="color:var(--text-muted)">hingga 9.6 Gbps</small></td>
+          <td>30–100 m</td>
+          <td>⚠️ Boros daya</td>
+          <td>⚠️ Sedang (tgt enkripsi)</td>
+          <td>❌ Tidak</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Quiz 2 -->
+  <div class="quiz-box" id="quiz1">
+    <div class="demo-title">🧠 Uji Pemahamanmu</div>
+    <div class="quiz-progress-text" id="qprog1">Pertanyaan 1 dari 3</div>
+    <div id="quizContent1"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-arrow" onclick="switchSection(0)">← Sebelumnya</button>
+    <div class="section-dots">
+      <div class="dot" onclick="switchSection(0)"></div>
+      <div class="dot active" onclick="switchSection(1)"></div>
+      <div class="dot" onclick="switchSection(2)"></div>
+    </div>
+    <button class="nav-arrow" onclick="switchSection(2)">Selanjutnya →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SECTION 3 ═══════════════════ -->
+<div class="section s3" id="section2">
+
+  <div class="section-hero">
+    <div class="section-number">// Topik 03</div>
+    <h2>🔒 Proteksi Data saat Berinternet</h2>
+    <p>Setiap hari kita mengirim data pribadi lewat internet — login, pesan, foto, bahkan data perbankan. Ancaman siber nyata ada, tapi dengan pengetahuan yang tepat, kamu bisa terlindungi!</p>
+    <div class="section-meta">
+      <span class="meta-chip chip-green">🛡️ Enkripsi & VPN</span>
+      <span class="meta-chip chip-blue">🔑 Password Kuat</span>
+      <span class="meta-chip chip-amber">⚠️ Ancaman Siber</span>
+    </div>
+  </div>
+
+  <!-- VPN EXPLAINER -->
+  <div class="signal-demo">
+    <div class="demo-title">🔐 Apa itu VPN dan Kenapa Penting di Wi-Fi Publik?</div>
+
+    <div class="explainer" style="margin-bottom:16px">
+      <div class="explainer-title">🤔 Masalah: Wi-Fi Publik itu Seperti Berbicara di Keramaian</div>
+      <p>Bayangkan kamu di kafe dan berbicara keras-keras dengan temanmu tentang password akun bankmu. Semua orang di sekitarmu bisa mendengar! Itulah yang terjadi saat menggunakan <strong>Wi-Fi publik tanpa enkripsi</strong> — data yang kamu kirim bisa "didengar" oleh siapapun yang terhubung ke jaringan yang sama.</p>
+    </div>
+
+    <div class="vpn-visual">
+      <div class="vpn-node">
+        <div class="vpn-icon-box" style="border-color:rgba(0,200,245,0.4)">📱</div>
+        <div class="vpn-label">Ponselmu</div>
+      </div>
+      <div class="vpn-arrow">→</div>
+      <div class="vpn-node">
+        <div class="vpn-icon-box" style="border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.1)">🛡️</div>
+        <div class="vpn-label">VPN<br>Server</div>
+      </div>
+      <div class="vpn-tunnel">
+        <div class="tunnel-segment" style="border-color:rgba(124,58,237,0.5);color:#a78bfa">🔒</div>
+        <div class="tunnel-segment" style="border-color:rgba(124,58,237,0.5);color:#a78bfa">🔒</div>
+        <div class="tunnel-segment" style="border-color:rgba(124,58,237,0.5);color:#a78bfa">🔒</div>
+      </div>
+      <div class="vpn-arrow">→</div>
+      <div class="vpn-node">
+        <div class="vpn-icon-box" style="border-color:rgba(16,185,129,0.4)">🌐</div>
+        <div class="vpn-label">Internet</div>
+      </div>
+      <div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%);background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);border-radius:8px;padding:4px 10px;font-size:10px;color:#f43f5e;white-space:nowrap">👁️ Hacker di Wi-Fi yang sama? Hanya lihat data terenkripsi!</div>
+    </div>
+
+    <div class="explainer">
+      <div class="explainer-title">💡 VPN itu Seperti Terowongan Rahasia</div>
+      <p><strong>VPN</strong> (Virtual Private Network) membuat "terowongan terenkripsi" antara ponselmu dan server VPN. Semua data yang melewati terowongan ini <strong>dienkripsi</strong> — bahkan pemilik Wi-Fi publik pun tidak bisa membacanya!</p>
+      <p><strong>Tanpa VPN di Wi-Fi publik:</strong> Data mengalir bebas → hacker di jaringan yang sama bisa menyadap → bisa mencuri password, cookie login, atau data pribadi.</p>
+      <p><strong>Dengan VPN:</strong> Data masuk "terowongan" terenkripsi → sampai ke server VPN → baru diteruskan ke internet. Hacker hanya melihat "sampah" terenkripsi yang tidak bisa dibaca.</p>
+      <p>🔑 <strong>Contoh VPN gratis terpercaya:</strong> ProtonVPN (gratis & tidak ada batas data), Windscribe (10 GB/bulan gratis). Hindari VPN gratis yang tidak jelas karena bisa jadi justru mencuri datamu!</p>
+    </div>
+  </div>
+
+  <!-- Threats -->
+  <div class="signal-demo">
+    <div class="demo-title">⚠️ Ancaman Siber yang Perlu Kamu Waspadai <small style="font-size:12px;font-weight:400;color:var(--text-muted)">(klik kartu untuk detail)</small></div>
+    <div class="threat-grid">
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">🎣</div>
+          <div>
+            <div class="threat-name">Phishing</div>
+            <div style="font-size:11px;color:var(--text-muted)">Penipuan online</div>
+          </div>
+          <span class="threat-level level-high">Bahaya Tinggi</span>
+        </div>
+        <div class="threat-desc">Penipu membuat email/pesan/website palsu yang tampak asli untuk mencuri username dan password-mu.</div>
+        <div class="threat-detail">
+          🔍 <strong>Cara Kerjanya:</strong> Kamu menerima email "dari BRI" yang bilang akunmu akan diblokir. Kamu klik link-nya, masuk ke situs yang tampak persis seperti BRI asli, lalu memasukkan password. Padahal itu situs palsu!<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Selalu cek URL dengan teliti (bri.co.id vs br1.co.id — lihat bedanya?). Jangan klik link dari email/WA yang tidak kamu minta. Akses langsung situs bank lewat mengetik URL di browser.
+        </div>
+      </div>
+
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">🦠</div>
+          <div>
+            <div class="threat-name">Malware</div>
+            <div style="font-size:11px;color:var(--text-muted)">Software berbahaya</div>
+          </div>
+          <span class="threat-level level-high">Bahaya Tinggi</span>
+        </div>
+        <div class="threat-desc">Program jahat yang bisa mencuri data, merekam ketikanmu, atau mengenkripsi file dan minta uang tebusan.</div>
+        <div class="threat-detail">
+          🔍 <strong>Jenis-jenisnya:</strong><br>
+          • <strong>Virus</strong> — menempel pada file lain, menyebar saat file dibuka<br>
+          • <strong>Trojan</strong> — berpura-pura jadi aplikasi berguna, tapi di dalamnya berbahaya<br>
+          • <strong>Ransomware</strong> — mengunci seluruh file ponselmu, minta tebusan Bitcoin<br>
+          • <strong>Spyware</strong> — diam-diam merekam aktivitasmu, kirim ke hacker<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Install hanya dari Google Play Store atau App Store resmi. Jangan instal APK dari link WA atau website tidak jelas. Update OS secara rutin.
+        </div>
+      </div>
+
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">👥</div>
+          <div>
+            <div class="threat-name">Man in the Middle</div>
+            <div style="font-size:11px;color:var(--text-muted)">Penyadapan</div>
+          </div>
+          <span class="threat-level level-high">Bahaya Tinggi</span>
+        </div>
+        <div class="threat-desc">Penyerang menyisipkan diri di tengah komunikasimu untuk menyadap atau mengubah data yang kamu kirim.</div>
+        <div class="threat-detail">
+          🔍 <strong>Contoh Nyata:</strong> Di kafe, hacker membuat hotspot palsu bernama "Kafe_Gratis_WiFi". Kamu konek, semua traffic-mu melewati laptop hacker. Saat kamu buka Instagram, hacker bisa melihat username & password-mu.<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Gunakan VPN di Wi-Fi publik. Pastikan situs yang dikunjungi HTTPS. Jangan konek ke Wi-Fi yang nama/sumbernya tidak jelas.
+        </div>
+      </div>
+
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">📲</div>
+          <div>
+            <div class="threat-name">Smishing</div>
+            <div style="font-size:11px;color:var(--text-muted)">Phishing via SMS</div>
+          </div>
+          <span class="threat-level level-med">Bahaya Sedang</span>
+        </div>
+        <div class="threat-desc">Phishing yang dikirim lewat SMS, bukan email. Sering pura-pura jadi bank, kurir, atau pemerintah.</div>
+        <div class="threat-detail">
+          🔍 <strong>Contoh Pesan:</strong> "Paket Anda tertahan di bea cukai. Bayar biaya Rp15.000 di: [link berbahaya]" atau "Akun BRI Anda terblokir, verifikasi segera: [link palsu]"<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Bank dan kurir resmi tidak pernah meminta verifikasi via link SMS. Jangan klik, langsung hapus. Jika ragu, hubungi call center resmi secara manual.
+        </div>
+      </div>
+
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">🔓</div>
+          <div>
+            <div class="threat-name">Data Breach</div>
+            <div style="font-size:11px;color:var(--text-muted)">Kebocoran data</div>
+          </div>
+          <span class="threat-level level-med">Bahaya Sedang</span>
+        </div>
+        <div class="threat-desc">Data pengguna bocor dari server perusahaan. Email, password, dan info pribadimu bisa dijual di dark web.</div>
+        <div class="threat-detail">
+          🔍 <strong>Kenapa Bahaya:</strong> Jika kamu pakai password yang sama di banyak akun, hacker bisa mencoba password yang bocor ke semua akunmu (credential stuffing). Satu kebocoran = semua akun terancam!<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Gunakan password <strong>berbeda</strong> di setiap akun penting. Cek apakah emailmu pernah bocor di <strong>haveibeenpwned.com</strong>. Aktifkan 2FA.
+        </div>
+      </div>
+
+      <div class="threat-card" onclick="toggleThreat(this)">
+        <div class="threat-header">
+          <div class="threat-icon">📡</div>
+          <div>
+            <div class="threat-name">Rogue Hotspot</div>
+            <div style="font-size:11px;color:var(--text-muted)">Wi-Fi palsu</div>
+          </div>
+          <span class="threat-level level-med">Bahaya Sedang</span>
+        </div>
+        <div class="threat-desc">Hacker membuat hotspot Wi-Fi palsu dengan nama yang mirip tempat asli untuk menjebak pengguna.</div>
+        <div class="threat-detail">
+          🔍 <strong>Contoh:</strong> Di bandara ada Wi-Fi "AirportFreeWifi" dan "Airport_Free_WiFi" — salah satunya palsu milik hacker. Tampilannya identik, tapi semua data yang kamu kirim melewati hacker.<br><br>
+          🛡️ <strong>Cara Hindari:</strong> Tanya petugas nama Wi-Fi resmi. Perhatikan ejaan dengan teliti. Gunakan VPN meski sudah konek ke Wi-Fi yang tampak benar.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="tips-wrap">
+    <div class="tips-header"><span>🛡️</span><h3>10 Langkah Nyata Melindungi Data Digitalmu</h3></div>
+    <div class="tip-item">
+      <div class="tip-num">01</div>
+      <div class="tip-text">
+        <strong>Password Kuat & Unik di Setiap Akun</strong>
+        <span>Minimal 12 karakter, gabungkan huruf besar, kecil, angka, simbol. Contoh buruk: "budi123" atau "password". Contoh baik: "Bu!k4nK4taS4ndi#2024". Gunakan <strong>password manager</strong> (Bitwarden gratis!) agar tidak perlu mengingat semuanya.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">02</div>
+      <div class="tip-text">
+        <strong>Aktifkan Autentikasi Dua Faktor (2FA)</strong>
+        <span>2FA artinya setelah memasukkan password, kamu perlu verifikasi kedua — biasanya kode 6 angka dari aplikasi (Google Authenticator, Authy) atau SMS. Meski passwordmu bocor, hacker tetap tidak bisa masuk tanpa kode kedua. Aktifkan di semua akun penting!</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">03</div>
+      <div class="tip-text">
+        <strong>Gunakan VPN di Wi-Fi Publik</strong>
+        <span>Seperti penjelasan di atas — VPN mengenkripsi semua traffic-mu. Di kafe, mall, hotel, bandara? Aktifkan VPN dulu sebelum buka apapun. ProtonVPN gratis dan tidak ada batas waktu.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">04</div>
+      <div class="tip-text">
+        <strong>Selalu Cek HTTPS sebelum Login</strong>
+        <span>Sebelum memasukkan username/password di website manapun, pastikan ada 🔒 dan "https://" di address bar. Ini langkah pertama yang paling mudah dan paling sering diabaikan.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">05</div>
+      <div class="tip-text">
+        <strong>Update OS & Aplikasi Secara Rutin</strong>
+        <span>Setiap update biasanya berisi <strong>patch keamanan</strong> yang menutup celah yang ditemukan. Hacker aktif mengeksploitasi ponsel yang belum di-update. Aktifkan auto-update untuk keamanan kritikal.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">06</div>
+      <div class="tip-text">
+        <strong>Periksa Izin Aplikasi</strong>
+        <span>Aplikasi game tidak perlu akses kontak atau mikrofon. Aplikasi kalkulator tidak perlu akses kamera. Buka Pengaturan → Aplikasi → Izin, cabut izin yang tidak masuk akal. Lebih sedikit izin = lebih sedikit risiko.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">07</div>
+      <div class="tip-text">
+        <strong>Backup Data Secara Berkala</strong>
+        <span>Simpan cadangan foto, dokumen penting di Google Drive, iCloud, atau hard disk eksternal. Jika terkena ransomware, kamu tidak perlu membayar tebusan karena datamu sudah aman di tempat lain.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">08</div>
+      <div class="tip-text">
+        <strong>Matikan Bluetooth & Wi-Fi saat Tidak Dipakai</strong>
+        <span>Setiap koneksi terbuka adalah "pintu" yang potensial. Saat tidak dipakai, matikan Bluetooth dan Wi-Fi. Ini juga menghemat baterai ponselmu!</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">09</div>
+      <div class="tip-text">
+        <strong>Jangan Sembarang Klik Link</strong>
+        <span>Sebelum klik, arahkan jari ke link untuk melihat URL tujuannya. Jika ada typo kecil (g00gle.com, b-r-i.com), itu kemungkinan phishing. Jika tidak yakin, jangan klik — ketik langsung URL di browser.</span>
+      </div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-num">10</div>
+      <div class="tip-text">
+        <strong>Aktifkan Enkripsi Penyimpanan Ponsel</strong>
+        <span>Di Android: Pengaturan → Keamanan → Enkripsi. Di iPhone sudah otomatis aktif jika ada PIN/Face ID. Jika ponsel hilang atau dicuri, data tidak bisa diakses tanpa PIN yang benar.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="checklist">
+    <div class="demo-title">✅ Checklist Keamanan Digital — Sudah Kamu Lakukan?</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Password akun email, sosmed, dan bank saya sudah kuat & berbeda-beda</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Autentikasi 2 faktor (2FA) sudah aktif di email dan akun penting</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Saya sudah tahu cara cek HTTPS / ikon kunci sebelum login</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">OS dan aplikasi di ponsel saya selalu up-to-date</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Saya tidak sembarangan klik link dari SMS atau WA yang mencurigakan</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Saya menggunakan atau tahu cara menggunakan VPN di Wi-Fi publik</div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox">✓</div><div class="check-label">Data penting saya sudah di-backup ke cloud atau storage lain</div></div>
+    <div class="checklist-score">
+      <span style="font-size:12px;color:var(--text-muted)" id="checkCount">0 / 7 terpenuhi</span>
+      <div class="score-bar"><div class="score-fill" id="checkFill"></div></div>
+      <span style="font-size:12px;font-weight:700;color:var(--accent3)" id="checkPct">0%</span>
+    </div>
+  </div>
+
+  <!-- Quiz 3 -->
+  <div class="quiz-box" id="quiz2">
+    <div class="demo-title">🧠 Uji Pemahamanmu</div>
+    <div class="quiz-progress-text" id="qprog2">Pertanyaan 1 dari 3</div>
+    <div id="quizContent2"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-arrow" onclick="switchSection(1)">← Sebelumnya</button>
+    <div class="section-dots">
+      <div class="dot" onclick="switchSection(0)"></div>
+      <div class="dot" onclick="switchSection(1)"></div>
+      <div class="dot active" onclick="switchSection(2)"></div>
+    </div>
+    <button class="nav-arrow" disabled>Selesai 🎉</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ══════════════════════════════════
+//  QUIZ DATA
+// ══════════════════════════════════
+const quizData = [
+  [
+    { q: "Mengapa jaringan ponsel disebut 'jaringan seluler'?", opts: ["Karena menggunakan sel surya sebagai sumber energi","Karena area jangkauan dibagi menjadi banyak 'sel' yang ditangani BTS","Karena ponsel berbentuk kotak seperti sel","Karena hanya bisa dipakai di dalam sel penjara"], ans: 1, exp: "✅ Tepat! Jaringan ponsel disebut 'seluler' karena area jangkauan dibagi menjadi banyak sel kecil, dan setiap sel dilayani oleh satu BTS (Base Transceiver Station)." },
+    { q: "Proses perpindahan ponsel dari satu BTS ke BTS lain tanpa memutus koneksi disebut...", opts: ["Roaming","Switching","Handover / Handoff","Cell Migration"], ans: 2, exp: "✅ Benar! Handover (atau handoff) adalah proses perpindahan mulus dari satu BTS ke BTS lain. Ini terjadi otomatis saat kamu bergerak tanpa kamu sadari." },
+    { q: "Generasi jaringan seluler mana yang pertama kali memperkenalkan SMS?", opts: ["1G","2G","3G","4G"], ans: 1, exp: "✅ Tepat! 2G (GSM) adalah generasi pertama yang menggunakan teknologi digital, dan SMS pertama kali muncul di era 2G pada tahun 1990-an." }
+  ],
+  [
+    { q: "Mengapa transfer data via kabel lebih aman dari wireless (Bluetooth/Wi-Fi)?", opts: ["Karena kabel lebih mahal","Karena data mengalir melalui medium fisik tertutup dan tidak bisa disadap dari jarak jauh","Karena kabel menggunakan enkripsi otomatis","Karena kabel lebih cepat"], ans: 1, exp: "✅ Benar! Kabel mengalirkan data melalui kawat fisik — tidak ada sinyal yang bisa 'ditangkap' oleh perangkat lain di sekitarmu. Ini membuatnya paling aman dari penyadapan." },
+    { q: "Apa fungsi teknik 'frequency hopping' pada Bluetooth?", opts: ["Membuat Bluetooth lebih cepat","Menghemat baterai ponsel","Menghindari interferensi dengan sinyal Wi-Fi dan mencegah gangguan","Memperluas jangkauan Bluetooth"], ans: 2, exp: "✅ Tepat! Bluetooth berpindah frekuensi 1.600 kali per detik untuk menghindari tabrakan dengan sinyal lain (seperti Wi-Fi 2.4 GHz) dan lebih tahan terhadap gangguan." },
+    { q: "Apa perbedaan utama antara HTTP dan HTTPS?", opts: ["HTTPS lebih lambat dari HTTP","HTTPS mengenkripsi data sehingga tidak bisa dibaca jika disadap, HTTP tidak","HTTPS hanya untuk website toko online","Tidak ada perbedaan, hanya beda penulisan"], ans: 1, exp: "✅ Benar! HTTPS menggunakan enkripsi TLS — data yang dikirim 'dikunci' sebelum dikirim. Meski disadap, hacker hanya melihat data acak yang tidak bisa dibaca. HTTP mengirim data sebagai teks biasa yang terbaca siapapun." }
+  ],
+  [
+    { q: "Kamu di kafe dan ingin membuka m-banking. Apa langkah keamanan yang PALING penting?", opts: ["Pastikan duduk di sudut agar tidak ada yang melihat layarmu","Aktifkan VPN sebelum membuka m-banking, lalu pastikan URL diawali https://","Matikan Wi-Fi dan gunakan data seluler, plus aktifkan VPN jika ada","Minta password Wi-Fi dari kasir agar lebih aman"], ans: 2, exp: "✅ Sempurna! Menggunakan data seluler lebih aman dari Wi-Fi publik (tidak ada hacker di 'jaringan yang sama'). Tapi tetap aktifkan VPN sebagai lapisan tambahan. Dan selalu pastikan HTTPS!" },
+    { q: "Apa yang dimaksud dengan serangan 'Phishing'?", opts: ["Memancing ikan menggunakan perangkat digital","Penipuan yang menyamar sebagai entitas terpercaya untuk mencuri informasi login atau data pribadi","Serangan yang membanjiri server dengan permintaan berlebihan","Virus yang menyebar melalui file foto"], ans: 1, exp: "✅ Benar! Phishing berasal dari kata 'fishing' (memancing) — penipu 'memancing' korban dengan umpan berupa email/pesan/website palsu yang tampak meyakinkan untuk mencuri data login." },
+    { q: "Mengapa kamu harus menggunakan password BERBEDA di setiap akun?", opts: ["Karena aturan dari Google dan Meta mewajibkan hal itu","Jika satu layanan terkena data breach dan passwordmu bocor, akun lainmu tetap aman","Agar lebih mudah diingat","Karena password yang sama akan kedaluwarsa secara otomatis"], ans: 1, exp: "✅ Tepat! Ini konsep 'password hygiene'. Jika kamu pakai password sama di mana-mana, satu kebocoran data = SEMUA akunmu terancam. Password berbeda = kerusakan terisolasi hanya di satu akun." }
+  ]
+];
+
+const quizState = [
+  {current:0, score:0, answered:false},
+  {current:0, score:0, answered:false},
+  {current:0, score:0, answered:false}
+];
+
+// ══════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════
+function switchSection(idx) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-btn').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.dot').forEach((d,i) => {
+    d.classList.toggle('active', false);
+  });
+  // Update all dot groups
+  document.querySelectorAll('.section-dots').forEach(group => {
+    group.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+  });
+  document.getElementById('progressBar').style.width = ((idx+1)/3*100)+'%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ══════════════════════════════════
+//  SIGNAL CANVAS
+// ══════════════════════════════════
+let signalType = 'analog';
+let animId;
+
+const signalExplains = {
+  analog: `<span class="label" style="background:rgba(0,200,245,0.15);color:var(--accent1)">ANALOG</span><br>
+    <strong>Kenapa bentuknya seperti gelombang laut yang mulus?</strong><br>
+    Sinyal analog berubah secara <strong>kontinu</strong> — nilainya bisa berupa angka apapun antara rendah dan tinggi, bergerak mulus seperti ombak. Suara manusiamu sebenarnya sinyal analog: getaran pita suara menciptakan perubahan tekanan udara yang mulus dan terus-menerus. Kelemahan: "noise" (gangguan listrik, bangunan, dll) dapat mengubah bentuk gelombang dan merusak kualitas sinyal. Jaringan 1G menggunakan analog.`,
+  digital: `<span class="label" style="background:rgba(16,185,129,0.15);color:var(--accent3)">DIGITAL</span><br>
+    <strong>Kenapa bentuknya seperti tangga — kotak-kotak?</strong><br>
+    Sinyal digital hanya mengenal <strong>DUA nilai</strong>: 1 (tinggi) atau 0 (rendah). Tidak ada nilai "0.5" atau "0.7". Seperti lampu — hanya bisa nyala atau mati. Setiap data digital (teks, foto, video) pada dasarnya adalah rangkaian panjang angka 0 dan 1. Keunggulannya: jauh lebih tahan gangguan! Selama "kotak"-nya masih terbaca, data tetap utuh. Jaringan 2G ke atas menggunakan digital.`,
+  modulated: `<span class="label" style="background:rgba(245,158,11,0.15);color:var(--accent4)">TERMODULASI</span><br>
+    <strong>Kenapa bentuknya seperti gelombang yang "bergoyang" tidak merata?</strong><br>
+    Di dunia nyata, data digital (0 dan 1) tidak bisa langsung ditransmisikan ke udara — perlu "ditumpangkan" ke sinyal pembawa (carrier wave) yang bisa merambat melalui udara. Proses penumpangan data digital ke sinyal analog ini disebut <strong>modulasi</strong>. Kamu bisa lihat amplitudo (tinggi gelombang) atau frekuensi (rapat/jarangnya gelombang) berubah-ubah sesuai data yang dibawa. Inilah cara ponsel mengirim datamu ke menara BTS!`
+};
+
+function setSignal(type, btn) {
+  signalType = type;
+  document.querySelectorAll('.signal-controls .sig-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('signalExplain').innerHTML = signalExplains[type];
+}
+
+function drawSignal() {
+  const canvas = document.getElementById('signalCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth;
+  const H = 110;
+  if (canvas.width !== W * dpr || canvas.height !== H * dpr) {
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.height = H + 'px';
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  // grid line
+  ctx.strokeStyle = 'rgba(30,48,80,0.8)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, H/2); ctx.lineTo(W, H/2); ctx.stroke();
+
+  const t = Date.now() / 420;
+
+  if (signalType === 'analog') {
+    ctx.strokeStyle = '#00c8f5'; ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#00c8f5'; ctx.shadowBlur = 10;
+    ctx.beginPath();
+    for (let x = 0; x <= W; x++) {
+      const y = H/2 + Math.sin((x/W)*Math.PI*8 + t) * (H/2 - 12);
+      x === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  } else if (signalType === 'digital') {
+    const bits = 14;
+    const bw = W/bits;
+    const seq = [1,0,1,1,0,0,1,0,1,1,0,1,0,1];
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#10b981'; ctx.shadowBlur = 8;
+    ctx.beginPath();
+    let px=0, py=H/2;
+    for (let i=0; i<bits; i++) {
+      const bit = seq[(i + Math.floor(t/2.5)) % bits];
+      const ny = bit===1 ? 18 : H-18;
+      ctx.moveTo(px, py); ctx.lineTo(px, ny); ctx.lineTo(px+bw, ny);
+      px += bw; py = ny;
+    }
+    ctx.stroke();
+    // labels
+    ctx.fillStyle = 'rgba(16,185,129,0.7)'; ctx.font = '10px JetBrains Mono, monospace';
+    for (let i=0; i<bits; i++) {
+      const bit = seq[(i + Math.floor(t/2.5)) % bits];
+      ctx.fillText(bit, i*bw + bw/2 - 3, bit===1 ? 14 : H-5);
+    }
+  } else {
+    for (let x=0; x<=W; x++) {
+      const carrier = Math.sin((x/W)*Math.PI*22 + t*1.1);
+      const data = Math.sin((x/W)*Math.PI*4 + t*0.4);
+      const y = H/2 + carrier*(1 + data*0.65)*(H/2-14);
+      const hue = 260 + x/W*80;
+      ctx.strokeStyle = `hsl(${hue},75%,65%)`;
+      ctx.shadowColor = `hsl(${hue},75%,65%)`; ctx.shadowBlur = 6;
+      ctx.lineWidth = 2;
+      if (x===0) { ctx.beginPath(); ctx.moveTo(x,y); }
+      else { ctx.lineTo(x,y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x,y); }
+    }
+  }
+  ctx.shadowBlur = 0;
+  animId = requestAnimationFrame(drawSignal);
+}
+
+// ══════════════════════════════════
+//  TRANSFER DEMO
+// ══════════════════════════════════
+let transferType = 'cable';
+let transferRunning = false;
+let speedAnimId;
+
+const transferConfigs = {
+  cable:     { color:'#10b981', label:'USB Cable — Hingga 5 Gbps', speed:'5 Gbps', time:'~0.16 detik', emoji:'📂', deviceB:'📱', deviceBLabel:'Ponsel B' },
+  bluetooth: { color:'#3b82f6', label:'Bluetooth 5.0 — Hingga 3 Mbps', speed:'3 Mbps', time:'~267 detik', emoji:'📄', deviceB:'📱', deviceBLabel:'Ponsel B' },
+  wifi:      { color:'#7c3aed', label:'Wi-Fi Direct — Hingga 250 Mbps', speed:'250 Mbps', time:'~3.2 detik', emoji:'📁', deviceB:'📱', deviceBLabel:'Ponsel B' }
+};
+
+function setTransfer(type, btn) {
+  transferType = type;
+  document.querySelectorAll('.transfer-demo .sig-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cfg = transferConfigs[type];
+  document.getElementById('lineLabel').textContent = cfg.label;
+  document.getElementById('deviceB').textContent = cfg.deviceB;
+  document.getElementById('transferInfo').textContent = `📂 Kirim 100 MB file · Metode: ${type==='cable'?'Kabel':type==='bluetooth'?'Bluetooth':'Wi-Fi'} · Kecepatan: ${cfg.speed} · Estimasi: ${cfg.time}`;
+  document.getElementById('speedFill').style.width = '0%';
+
+  // update line
+  const tLine = document.getElementById('tLine');
+  tLine.style.background = `linear-gradient(90deg,var(--border),${cfg.color},var(--border))`;
+
+  // rebuild line area for wireless
+  const area = document.getElementById('transferLineArea');
+  const oldExtra = area.querySelectorAll('.wifi-rings,.bt-waves');
+  oldExtra.forEach(e => e.remove());
+
+  if (type === 'bluetooth') {
+    tLine.style.background = 'transparent';
+    const btw = document.createElement('div');
+    btw.className = 'bt-waves';
+    for (let i=0;i<5;i++) { const d=document.createElement('div'); d.className='bt-dot'; btw.appendChild(d); }
+    area.appendChild(btw);
+  } else if (type === 'wifi') {
+    tLine.style.background = 'transparent';
+    const rings = document.createElement('div');
+    rings.className = 'wifi-rings';
+    for (let i=0;i<3;i++) {
+      const r=document.createElement('div'); r.className='wifi-ring';
+      r.style.borderColor=cfg.color; rings.appendChild(r);
+    }
+    area.appendChild(rings);
+  } else {
+    tLine.style.background = `linear-gradient(90deg,var(--border),${cfg.color},var(--border))`;
+  }
+}
+
+function startTransfer() {
+  if (transferRunning) return;
+  transferRunning = true;
+
+  const cfg = transferConfigs[transferType];
+  const packets = [document.getElementById('p1'), document.getElementById('p2'), document.getElementById('p3')];
+  const delays = transferType==='bluetooth' ? [0,600,1200] : [0,300,600];
+  const duration = transferType==='bluetooth' ? 2800 : transferType==='cable' ? 900 : 1400;
+
+  // Animate device glow
+  const dA = document.getElementById('deviceA');
+  dA.style.borderColor = cfg.color;
+  dA.style.boxShadow = `0 0 14px ${cfg.color}40`;
+
+  // Speed bar
+  const fill = document.getElementById('speedFill');
+  fill.style.transition = `width ${duration/1000}s ease`;
+  fill.style.width = '0%';
+  requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = '100%'; }));
+
+  packets.forEach((p,i) => {
+    p.style.background = cfg.color;
+    p.style.boxShadow = `0 0 8px ${cfg.color}`;
+    p.textContent = cfg.emoji;
+    p.style.animation = 'none';
+    setTimeout(() => {
+      p.style.animation = `packetMove ${duration/1000 * 0.85}s ease forwards`;
+    }, delays[i]);
+  });
+
+  const totalTime = delays[delays.length-1] + duration + 200;
+  setTimeout(() => {
+    transferRunning = false;
+    dA.style.borderColor = '';
+    dA.style.boxShadow = '';
+    fill.style.width = '0%';
+    fill.style.transition = 'width 0.4s ease';
+  }, totalTime);
+}
+
+// ══════════════════════════════════
+//  COMM TABS
+// ══════════════════════════════════
+function switchComm(idx, btn) {
+  document.querySelectorAll('.comm-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.comm-content').forEach((c,i) => c.classList.toggle('active', i===idx));
+}
+
+// ══════════════════════════════════
+//  HTTP TABS
+// ══════════════════════════════════
+function switchHttp(idx, btn) {
+  document.querySelectorAll('.http-tab').forEach(t => { t.className = 'http-tab'; });
+  document.querySelectorAll('.http-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  if (idx===0) btn.className='http-tab active-http';
+  else btn.className='http-tab active-https';
+}
+
+// ══════════════════════════════════
+//  THREATS
+// ══════════════════════════════════
+function toggleThreat(card) { card.classList.toggle('expanded'); }
+
+// ══════════════════════════════════
+//  CHECKLIST
+// ══════════════════════════════════
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  const items = document.querySelectorAll('.check-item');
+  const checked = document.querySelectorAll('.check-item.checked').length;
+  const pct = Math.round((checked/items.length)*100);
+  document.getElementById('checkCount').textContent = `${checked} / ${items.length} terpenuhi`;
+  document.getElementById('checkFill').style.width = pct+'%';
+  document.getElementById('checkPct').textContent = pct+'%';
+}
+
+// ══════════════════════════════════
+//  QUIZ ENGINE
+// ══════════════════════════════════
+function renderQuiz(sIdx) {
+  const state = quizState[sIdx];
+  const questions = quizData[sIdx];
+  const container = document.getElementById(`quizContent${sIdx}`);
+  const progEl = document.getElementById(`qprog${sIdx}`);
+
+  if (state.current >= questions.length) { renderScore(sIdx); return; }
+
+  const q = questions[state.current];
+  progEl.textContent = `Pertanyaan ${state.current+1} dari ${questions.length}`;
+  state.answered = false;
+  const letters = ['A','B','C','D'];
+
+  container.innerHTML = `
+    <div class="quiz-q-num">Pertanyaan ${state.current+1}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o,i) => `<button class="quiz-option" data-letter="${letters[i]}" onclick="answerQuiz(${sIdx},${i})">${o}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="qfb${sIdx}"></div>
+    <button class="btn-primary" id="qnext${sIdx}" style="display:none" onclick="nextQuiz(${sIdx})">
+      ${state.current+1 < questions.length ? 'Pertanyaan Berikutnya →' : 'Lihat Hasil 🎉'}
+    </button>
+  `;
+}
+
+function answerQuiz(sIdx, optIdx) {
+  const state = quizState[sIdx];
+  if (state.answered) return;
+  state.answered = true;
+  const q = quizData[sIdx][state.current];
+  const opts = document.querySelectorAll(`#quizContent${sIdx} .quiz-option`);
+  const fb = document.getElementById(`qfb${sIdx}`);
+  const nxt = document.getElementById(`qnext${sIdx}`);
+
+  opts.forEach(o => o.setAttribute('onclick',''));
+
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    state.score++;
+    fb.textContent = q.exp;
+    fb.className = 'quiz-feedback feedback-correct';
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.textContent = '❌ Kurang tepat. ' + q.exp;
+    fb.className = 'quiz-feedback feedback-wrong';
+  }
+  fb.style.display = 'block';
+  nxt.style.display = 'inline-block';
+}
+
+function nextQuiz(sIdx) { quizState[sIdx].current++; renderQuiz(sIdx); }
+
+function renderScore(sIdx) {
+  const state = quizState[sIdx];
+  const total = quizData[sIdx].length;
+  const pct = Math.round((state.score/total)*100);
+  document.getElementById(`qprog${sIdx}`).textContent = 'Kuis Selesai!';
+
+  let grade, color, msg;
+  if (pct>=80) { grade='Luar Biasa! 🏆'; color='#10b981'; msg='Kamu benar-benar menguasai materi ini. Pertahankan!'; }
+  else if (pct>=60) { grade='Bagus! 👍'; color='#f59e0b'; msg='Hampir sempurna! Coba baca kembali materi yang tadi kurang tepat.'; }
+  else { grade='Terus Belajar! 💪'; color='#f43f5e'; msg='Jangan menyerah! Scroll ke atas dan baca materinya sekali lagi ya.'; }
+
+  document.getElementById(`quizContent${sIdx}`).innerHTML = `
+    <div class="quiz-score-board" style="display:block">
+      <div class="score-circle" style="border-color:${color}">
+        <div class="score-num" style="color:${color}">${state.score}/${total}</div>
+        <div class="score-sub">skor</div>
+      </div>
+      <div class="score-title" style="color:${color}">${grade}</div>
+      <div class="score-msg">${msg}</div>
+      <button class="btn-primary" onclick="resetQuiz(${sIdx})">🔄 Coba Lagi</button>
+    </div>
+  `;
+}
+
+function resetQuiz(sIdx) {
+  quizState[sIdx] = {current:0, score:0, answered:false};
+  renderQuiz(sIdx);
+}
+
+// ══════════════════════════════════
+//  INIT
+// ══════════════════════════════════
+window.addEventListener('load', () => {
+  [0,1,2].forEach(i => renderQuiz(i));
+  drawSignal();
+  setTransfer('cable', document.querySelector('.transfer-demo .sig-btn'));
+});
+
+window.addEventListener('resize', () => {
+  cancelAnimationFrame(animId);
+  drawSignal();
+});
+</script>
+</body>
+</html>
